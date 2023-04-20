@@ -172,8 +172,14 @@ if [ "${KDE_FULL_SESSION}" == "true" ]; then
 fi
 
 # Gnome 3, Unity
-gsettings set org.gnome.desktop.background picture-uri "file://$WP" 2> /dev/null
-gsettings set org.gnome.desktop.background picture-uri-dark "file://$WP" 2> /dev/null
+# check whether current system color scheme is set to dark.
+color_scheme = $(gsettings get org.gnome.desktop.interface gtk-theme)
+if [ [$theme == *"dark"*] ]; then
+    gsettings set org.gnome.desktop.background picture-uri-dark "file://$WP" 2> /dev/null
+else
+  gsettings set org.gnome.desktop.background picture-uri "file://$WP" 2> /dev/null
+fi
+
 if [[ "$4" =~ ^(wallpaper|centered|scaled|stretched|zoom|spanned)$ ]]; then
     gsettings set org.gnome.desktop.background picture-options "$4"
 fi
